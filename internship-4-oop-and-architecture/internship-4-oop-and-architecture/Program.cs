@@ -36,8 +36,8 @@ namespace internship_4_oop_and_architecture
                     CurrentExperience = 0,
                     MaxExperience=10,
                     Level = 1,
-                    Damage = 15,
-                    DamageIncrease = 1.5f,
+                    Damage = 25,
+                    DamageIncrease = 2f,
                     PlayerType=PlayerType.Warrior
                 };
                 Console.WriteLine("Your character has been created and you picked: " + warrior.PlayerType);
@@ -46,7 +46,6 @@ namespace internship_4_oop_and_architecture
                 {
                     if (enemy == EnemyType.Goblin)
                     {
-                        Console.WriteLine("Your luck picked Goblin as your enemy! This one is easy ;)");
                         var goblin = new Enemy
                         {
                             Name = "Goblin",
@@ -57,7 +56,36 @@ namespace internship_4_oop_and_architecture
                         };
                         WarriorGame(warrior, goblin);
                     }
+                    else if(enemy == EnemyType.Brute)
+                    {
+                        var brute = new Enemy
+                        {
+                            Name="Brute",
+                            Health=120,
+                            Damage=35,
+                            EnemyType=EnemyType.Brute,
+                            isStunned=false
+                        };
+                        WarriorGame(warrior, brute);
+
+                    }
+                    else if (enemy == EnemyType.Witch)
+                    {
+                        var witch = new Enemy
+                        {
+                            Name="Witch",
+                            Health=80,
+                            Damage=40,
+                            EnemyType=EnemyType.Witch,
+                            isStunned=false
+                        };
+                        WarriorGame(warrior, witch);
+                    }
+
                 }
+                Console.Write("Wait... there is no next enemy? ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(" YOU WON!!!");
 
             }
             
@@ -157,17 +185,18 @@ namespace internship_4_oop_and_architecture
 
         static Warrior WarriorGame(Warrior playerInfo,Enemy currentEnemy)
         {
+            Console.WriteLine($"Your luck picked {currentEnemy.Name} as your enemy! {playerInfo.Name} has this!\n");
+
+            
             while (playerInfo.CurrentHealth > 0 && currentEnemy.Health > 0)
             {
-                Console.WriteLine("Pick your next move: DirectAttack (1), SideAttack (2), CounterAttack (3) !");
+                Console.WriteLine("Pick your next move: DirectAttack (1), SideAttack (2), CounterAttack (3) !\n");
                 int pickMove = int.Parse(Console.ReadLine());
 
                 Random randomPick = new Random();
-                int enemyPickMove = randomPick.Next(1, 3);
+                int enemyPickMove = randomPick.Next(1, 4);
                 if (pickMove > 0 && pickMove < 4)
                 {
-                    if (!currentEnemy.isStunned)
-                    {
                         if (pickMove == enemyPickMove)
                         {
                             Console.WriteLine("What are the chances, you picked the same move. Try again!");
@@ -176,7 +205,7 @@ namespace internship_4_oop_and_architecture
                         {
                             Console.WriteLine("Nice pick! You attack first!");
 
-                            Console.WriteLine("What type of attack do you want to perform? Normal Attack (N) or Rage Attack (R) ?");
+                            Console.WriteLine("What type of attack do you want to perform? Normal Attack (N) or Rage Attack (R) ?\n");
                             string typeOfAttack = Console.ReadLine();
 
                             if (typeOfAttack.ToLower() != "n" && typeOfAttack.ToLower() != "r")
@@ -192,7 +221,7 @@ namespace internship_4_oop_and_architecture
                             {
                                 Console.WriteLine($"Nice! {playerInfo.Name} is doing great!");
                                 currentEnemy.Health -= playerInfo.Damage*playerInfo.DamageIncrease;
-                                playerInfo.CurrentHealth -= playerInfo.CurrentHealth * 0.5f;
+                                playerInfo.CurrentHealth -= playerInfo.CurrentHealth * 0.2f;
                             }
                         }
 
@@ -201,31 +230,6 @@ namespace internship_4_oop_and_architecture
                             Console.WriteLine($"Bad luck! {playerInfo.Name} is about to be hurt!");
                             playerInfo.CurrentHealth -= currentEnemy.Damage;
                         }
-                        
-                    }
-                    
-                }
-                
-                else if (currentEnemy.isStunned)
-                {
-                    Console.WriteLine("What type of attack do you want to perform? Normal Attack (N) or Rage Attack (R) ?");
-                    string typeOfAttack = Console.ReadLine();
-
-                    if (typeOfAttack.ToLower() != "n" && typeOfAttack.ToLower() != "r")
-                        Console.WriteLine("Wrong pick mate! Let's try this again!");
-
-                    else if (typeOfAttack.ToLower() == "n")
-                    {
-                        Console.WriteLine("Nice! You successfully attacked!");
-                        currentEnemy.Health -= playerInfo.Damage;
-                    }
-
-                    else
-                    {
-                        Console.WriteLine($"Nice! {playerInfo.Name} is doing great!");
-                        currentEnemy.Health -= playerInfo.Damage*playerInfo.DamageIncrease;
-                        playerInfo.CurrentHealth -= playerInfo.CurrentHealth * 0.5f;
-                    }
                     
                 }
 
@@ -234,13 +238,53 @@ namespace internship_4_oop_and_architecture
                     Console.WriteLine("Wrong input!");
                 }
 
-                Console.WriteLine($"╔══════════════╦═══════╗");
-                Console.WriteLine($"║ Your Health  ║  {playerInfo.CurrentHealth}   ║");
-                Console.WriteLine($"╠══════════════╬═══════╣");
-                Console.WriteLine($"║ Enemy Health ║  {currentEnemy.Health}   ║");
-                Console.WriteLine($"╚══════════════╩═══════╝");
+                Console.WriteLine($"╔════════════════════╦══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║  Your Health       ║  {playerInfo.CurrentHealth}   ");
+                Console.WriteLine($"╠════════════════════╬══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║  Enemy Health      ║  {currentEnemy.Health}   ");
+                Console.WriteLine($"╠════════════════════╬══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║  Your Damage       ║  {playerInfo.Damage}   ");
+                Console.WriteLine($"╠════════════════════╬══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║  Enemy Damage      ║  {currentEnemy.Damage}   ");
+                Console.WriteLine($"╠════════════════════╬══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║  Your Experience   ║  {playerInfo.CurrentExperience}   ");
+                Console.WriteLine($"╠════════════════════╬══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║  Your  Level       ║  {playerInfo.Level}   ");
+                Console.WriteLine($"╠════════════════════╬══════════════════════════════════════════════════════════════════════════════════════════════════");
+                Console.WriteLine($"║        Round       ║  {playerInfo.Round}   ");
+                Console.WriteLine($"╚════════════════════╩══════════════════════════════════════════════════════════════════════════════════════════════════");
 
             }
+
+            if (currentEnemy.EnemyType == EnemyType.Witch)
+            {
+                Console.WriteLine("You killed witch so you have to fight against 2 Skeletons");
+
+
+                var skeleton1 = new Enemy
+                {
+                    Name = "Skeleton",
+                    Health = 1,
+                    Damage = 30,
+                    EnemyType = EnemyType.Skeleton,
+                    isStunned = false
+                };
+                WarriorGame(playerInfo, skeleton1);
+
+                var skeleton2 = new Enemy
+                {
+                    Name = "Skeleton",
+                    Health = 1,
+                    Damage = 30,
+                    EnemyType = EnemyType.Skeleton,
+                    isStunned = false
+                };
+                WarriorGame(playerInfo, skeleton2);
+
+            }
+
+
+
             if (playerInfo.CurrentHealth <= 0)
             {
                 Console.WriteLine($"{playerInfo.Name} died! Better luck next time!");
@@ -248,10 +292,53 @@ namespace internship_4_oop_and_architecture
             }
             else
             {
-                Console.WriteLine($"Good job! {playerInfo.Name} worked hard and defeated {currentEnemy.Name}! Moving onto the next enemy!");
+                Console.WriteLine($"Good job! {playerInfo.Name} worked hard and defeated {currentEnemy.Name}! Moving onto the next enemy!\n");
+                playerInfo.Round++;
+                playerInfo.CurrentHealth += playerInfo.MaxHealth * 0.25f;
+                switch (currentEnemy.EnemyType)
+                {
+                    case EnemyType.Goblin:
+                        playerInfo.CurrentExperience += 4;
+                        break;
+                    case EnemyType.Brute:
+                        playerInfo.CurrentExperience += 5;
+                        break;
+                    case EnemyType.Witch:
+                        playerInfo.CurrentExperience += 8;
+                        break;
+                    case EnemyType.Skeleton:
+                        playerInfo.CurrentExperience += 3;
+                        break;
+                    default:
+                        break;
+                }
+                if (playerInfo.CurrentExperience >= playerInfo.MaxExperience)
+                {
+                    Console.WriteLine($"Do you want to use half of your maximum XP ({playerInfo.MaxExperience/2}) to refill your HP? (yes/no)");
+                    string refillAnswer = Console.ReadLine();
+                    if (refillAnswer.ToUpper() == "YES")
+                    {
+                        playerInfo.CurrentExperience -= playerInfo.MaxExperience / 2;
+                        playerInfo.CurrentHealth = playerInfo.MaxHealth;
+                    }
+                    else if (refillAnswer.ToUpper() == "NO")
+                        Console.WriteLine("Okay!");
+                    else
+                        Console.WriteLine("Wrong input!");
+                }
+
+                if (playerInfo.CurrentExperience >= playerInfo.MaxExperience)
+                {
+                    playerInfo.CurrentExperience -= playerInfo.MaxExperience;
+                    playerInfo.Level++;
+                    playerInfo.MaxHealth += 20;
+                    playerInfo.CurrentHealth += 20;
+                    playerInfo.Damage += 10;
+                    playerInfo.DamageIncrease += 0.5f;
+                    playerInfo.MaxExperience += 2;
+                }
             }
-
-
+        
             return playerInfo;
         }
     }

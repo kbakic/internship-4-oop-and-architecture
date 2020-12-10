@@ -12,6 +12,7 @@
         public int Level { get; set; }
         public int Damage { get; set; }
 
+        public int Round { get; set; } = 1;
         public PlayerType PlayerType { get; set; }
 
 
